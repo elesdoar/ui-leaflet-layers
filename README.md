@@ -33,7 +33,7 @@ angular.extend($scope, {
         type: 'mapboxGL',
         layerOptions: {
           accessToken: [token],
-          style: $scope.style
+          style: 'mapbox://styles/mapbox/streets-v8'
         }
       }
     },
