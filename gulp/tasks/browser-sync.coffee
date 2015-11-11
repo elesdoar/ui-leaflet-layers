@@ -5,7 +5,8 @@ gulp.task 'browser-sync', () ->
   browserSync.init
     open: false
     server:
-      baseDir: './'
+      baseDir: './',
+      directory: true
   return
 
 gulp.task 'watch', () ->

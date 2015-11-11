@@ -43,5 +43,6 @@ build = (source, out = 'index.js') ->
 gulp.task 'build', ->
   build [
     'src/services/leafletHelpers.coffee',
-    'src/services/leafletLayerHelpers.coffee'
+    'src/services/leafletLayerHelpers.coffee',
+    'src/services/logger.coffee'
   ], 'ui-leaflet-layers.js'

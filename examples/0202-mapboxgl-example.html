@@ -33,7 +33,8 @@
           },
           accessToken: 'pk.eyJ1IjoiZWxlc2RvYXIiLCJhIjoiV1Zta3NwNCJ9.2_2lLpDOqJEF5fWp88-p7A'
         })
-        .controller('MapboxGLExample', function($scope, $timeout, defaults) {
+        .controller('MapboxGLExample', function($scope, $timeout, defaults, leafletLayersLogger) {
+          leafletLayersLogger.currentLevel = leafletLayersLogger.LEVELS.debug;
           angular.extend($scope, defaults);
           $scope.style= 'mapbox://styles/mapbox/streets-v8';
           var mapboxGlLayer = {

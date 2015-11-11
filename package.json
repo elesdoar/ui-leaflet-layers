@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Angular UI Leaflet Layers Plugin",
   "main": "dist/ui-leaflet-layers.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node_modules/gulp/bin/gulp.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/elesdoar/ui-leaflet-layers.git"
