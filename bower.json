@@ -1,0 +1,42 @@
+{
+  "name": "ui-leaflet-layers",
+  "version": "0.1.0",
+  "homepage": "https://github.com/elesdoar/ui-leaflet-layers",
+  "authors": [
+    "Michael Salgado <elesdoar@gmail.com>"
+  ],
+  "description": "Angular UI Leaflet Layers Plugin",
+  "main": "dist/ui-leaflet-layers.min.js",
+  "moduleType": [
+    "amd",
+    "es6"
+  ],
+  "keywords": [
+    "angularjs",
+    "ui-leaflet",
+    "leaflet",
+    "maps",
+    "cartodb",
+    "mapbox",
+    "esri"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "leaflet": "0.7.x",
+    "angular": "^1.2",
+    "ui-leaflet": "elesdoar/ui-leaflet#master"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.2"
+  },
+  "resolutions": {
+    "angular": "1.4.X"
+  }
+}
