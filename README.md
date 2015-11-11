@@ -4,6 +4,7 @@ Angular UI Leaflet Layers Plugin, it extend layer capabilities for [ui-leaflet](
 
 ### Supported Layers:
 
+* Google Maps
 * [MapboxGL](https://github.com/mapbox/mapbox-gl-leaflet)
 
 
@@ -12,7 +13,6 @@ Angular UI Leaflet Layers Plugin, it extend layer capabilities for [ui-leaflet](
 * [Mapbox](http://mapbox.com/)
 * [CartoDB](http://cartodb.com/)
 * [esri-leaflet](http://esri.github.io/esri-leaflet/)
-* Google Maps
 * Bing
 
 ### MapboxGL Example
