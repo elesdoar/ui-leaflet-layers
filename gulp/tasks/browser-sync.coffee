@@ -7,12 +7,8 @@ gulp.task 'browser-sync', () ->
     server:
       baseDir: './',
       directory: true
-  return
 
-gulp.task 'watch', () ->
-  gulp.watch 'examples/*.html', (file) ->
-    if file.type == 'changed'
-      result = browserSync.reload
-        stream: true
-      return result;
+  gulp.watch './src/**/*.coffee', gulp.series 'release'
+  gulp.watch './dist/**/*.min.js', browserSync.reload
+  gulp.watch './examples/**/*.html', browserSync.reload
   return

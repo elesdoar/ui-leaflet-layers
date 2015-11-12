@@ -5,15 +5,20 @@ Angular UI Leaflet Layers Plugin, it extend layer capabilities for [ui-leaflet](
 ### Supported Layers:
 
 * Google Maps
+* Bing
+* Yandex
+* China
+* HeatLayer
+* WebGLHeatMapLayer
+* WFS
+* UTFGrid
 * [MapboxGL](https://github.com/mapbox/mapbox-gl-leaflet)
-
 
 ### Coming Soon:
 
 * [Mapbox](http://mapbox.com/)
 * [CartoDB](http://cartodb.com/)
 * [esri-leaflet](http://esri.github.io/esri-leaflet/)
-* Bing
 
 ### MapboxGL Example
 
