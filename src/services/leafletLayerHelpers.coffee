@@ -1,6 +1,6 @@
 angular.module('ui-leaflet')
   .config ($provide) ->
-    $provide.decorator 'leafletLayerHelpers', ($delegate, leafletHelpers, leafletLayersLogger) ->
+    $provide.decorator 'leafletLayerHelpers', ($delegate, $rootScope, leafletHelpers, leafletLayersLogger) ->
       $log = leafletLayersLogger
       isArray = leafletHelpers.isArray
       isObject = leafletHelpers.isObject

@@ -3,7 +3,7 @@
  *
  * @version: 0.1.0
  * @author: Michael Salgado <elesdoar@gmail.com>
- * @date: Thu Nov 12 2015 01:34:30 GMT-0500 (COT)
+ * @date: Thu Nov 12 2015 01:40:28 GMT-0500 (COT)
  * @license: MIT
  */
 (function (window, angular){
@@ -44,7 +44,7 @@
 
 (function() {
   angular.module('ui-leaflet').config(function($provide) {
-    return $provide.decorator('leafletLayerHelpers', function($delegate, leafletHelpers, leafletLayersLogger) {
+    return $provide.decorator('leafletLayerHelpers', function($delegate, $rootScope, leafletHelpers, leafletLayersLogger) {
       var $log, errorHeader, isArray, isDefined, isObject, utfGridCreateLayer;
       $log = leafletLayersLogger;
       isArray = leafletHelpers.isArray;
