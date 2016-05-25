@@ -30,16 +30,16 @@
   ],
   "dependencies": {
     "leaflet": "0.7.x",
-    "angular": "^1.2",
+    "angular": "^1.5.x",
     "ui-leaflet": "elesdoar/ui-leaflet#master"
   },
   "devDependencies": {
     "azgs-leaflet": "azgs/azgs-leaflet",
-    "angular-mocks": "^1.2",
+    "angular-mocks": "^1.5.x",
     "leaflet-plugins": "~1.3.12"
   },
   "resolutions": {
-    "angular": "1.4.X"
+    "angular": "1.5.x"
   },
   "ignore": [
     ".*",
