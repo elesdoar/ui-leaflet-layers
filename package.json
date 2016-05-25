@@ -1,6 +1,6 @@
 {
   "name": "ui-leaflet-layers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Angular UI Leaflet Layers Plugin",
   "main": "dist/ui-leaflet-layers.js",
   "scripts": {
@@ -62,7 +62,7 @@
     "should": "^7.1.1"
   },
   "dependencies": {
-    "angular": "^1.4.7",
+    "angular": "^1.5.x",
     "leaflet": "^0.7.7",
     "ui-leaflet": "^1.0.0"
   }
