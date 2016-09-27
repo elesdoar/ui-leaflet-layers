@@ -3,7 +3,7 @@
            *
            * @version: 0.1.1
            * @author: Michael Salgado <elesdoar@gmail.com>
-           * @date: Fri Sep 23 2016 19:01:59 GMT-0500 (COT)
+           * @date: Tue Sep 27 2016 11:41:57 GMT-0500 (COT)
            * @license: MIT
            */
 (function (window, angular){
@@ -26,23 +26,62 @@
       };
     };
 
-    angular.extend($delegate, {
-      GoogleLayerPlugin: basicFunction(L.Google),
-      MapboxGL: basicFunction(L.mapboxGL),
+    var plugins = {
+      // Please keep keys order by alphabetical sort.
       BingLayerPlugin: basicFunction(L.BingLayer),
-      WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
       ChinaLayerPlugin: basicFunction(L.tileLayer.chinaProvider),
+      GoogleLayerPlugin: basicFunction(L.Google),
       HeatLayerPlugin: basicFunction(L.heatLayer),
+      LeafletProviderPlugin: basicFunction(L.TileLayer.Provider),
+      MapboxGL: basicFunction(L.mapboxGL),
+      MarkerClusterPlugin: basicFunction(L.MarkerClusterGroup),
+      UTFGridPlugin: basicFunction(L.UtfGrid),
       WebGLHeatMapLayerPlugin: basicFunction(L.TileLayer.WebGLHeatMap),
-      YandexLayerPlugin: basicFunction(L.Yandex),
-      UTFGridPlugin: basicFunction(L.UtfGrid)
-    });
+      WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
+      YandexLayerPlugin: basicFunction(L.Yandex)
+    };
+
+    if (angular.isDefined(L.esri)) {
+      angular.extend(plugins, {
+        AGSBaseLayerPlugin: basicFunction(L.esri.basemapLayer),
+        AGSClusteredLayerPlugin: basicFunction(L.esri.clusteredFeatureLayer),
+        AGSDynamicMapLayerPlugin: basicFunction(L.esri.dynamicMapLayer),
+        AGSFeatureLayerPlugin: basicFunction(L.esri.featureLayer),
+        AGSImageMapLayerPlugin: basicFunction(L.esri.imageMapLayer),
+        AGSHeatmapLayerPlugin: basicFunction(L.esri.heatmapFeatureLayer),
+        AGSTiledMapLayerPlugin: basicFunction(L.esri.tiledMapLayer)
+      });
+    } else {
+      angular.extend(plugins, {
+        AGSBaseLayerPlugin: basicFunction(),
+        AGSClusteredLayerPlugin: basicFunction(),
+        AGSDynamicMapLayerPlugin: basicFunction(),
+        AGSFeatureLayerPlugin: basicFunction(),
+        AGSImageMapLayerPlugin: basicFunction(),
+        AGSHeatmapLayerPlugin: basicFunction(),
+        AGSTiledMapLayerPlugin: basicFunction()
+      });
+    }
+
+    if (angular.isDefined(window.lvector)) {
+      angular.extend(plugins, {
+        AGSLayerPlugin: basicFunction(window.lvector.AGS)
+      });
+    } else {
+      angular.extend(plugins, {
+        AGSLayerPlugin: basicFunction()
+      });
+    }
+
+    angular.extend($delegate, plugins);
+
+    $log.info('[ui-leaflet-layers] - Layers plugin is loaded');
 
     return $delegate;
   });
 });
 angular.module('ui-leaflet').config(function ($provide) {
-  return $provide.decorator('leafletLayerHelpers', function ($delegate, $rootScope, leafletHelpers, leafletLayersLogger) {
+  return $provide.decorator('leafletLayerHelpers', function ($delegate, $rootScope, $q, leafletHelpers, leafletLayersLogger) {
     var $log = leafletLayersLogger;
     var isArray = leafletHelpers.isArray;
     var isObject = leafletHelpers.isObject;
@@ -77,28 +116,129 @@ angular.module('ui-leaflet').config(function ($provide) {
     };
 
     angular.extend($delegate.layerTypes, {
-      google: {
-        mustHaveUrl: false,
+      ags: {
+        mustHaveUrl: true,
         createLayer: function createLayer(params) {
-          var type = params.type || 'SATELLITE';
-          if (!leafletHelpers.GoogleLayerPlugin.isLoaded()) {
-            $log.error(errorHeader + ' The GoogleLayer plugin is not loaded.');
+          if (!leafletHelpers.AGSLayerPlugin.isLoaded()) {
             return;
           }
-          return new L.Google(type, params.options);
+
+          var options = angular.copy(params.options);
+          angular.extend(options, {
+            url: params.url
+          });
+          var layer = new lvector.AGS(options);
+          layer.onAdd = function (map) {
+            this.setMap(map);
+          };
+          layer.onRemove = function () {
+            this.setMap(null);
+          };
+          return layer;
         }
       },
-
-      mapboxGL: {
+      agsBase: {
+        mustHaveLayer: true,
         createLayer: function createLayer(params) {
-          if (!leafletHelpers.MapboxGL.isLoaded()) {
-            $log.error(errorHeader + ' The MapboxGL plugin is not loaded.');
+          if (!leafletHelpers.AGSBaseLayerPlugin.isLoaded()) {
             return;
           }
-          return new L.mapboxGL(params.options);
+          return L.esri.basemapLayer(params.layer, params.options);
         }
       },
+      agsClustered: {
+        mustHaveUrl: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.AGSClusteredLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The esri clustered layer plugin is not loaded.');
+            return;
+          }
 
+          if (!leafletHelpers.MarkerClusterPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The markercluster plugin is not loaded.');
+            return;
+          }
+          return L.esri.clusteredFeatureLayer(params.url, params.options);
+        }
+      },
+      agsDynamic: {
+        mustHaveUrl: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.AGSDynamicMapLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The esri plugin is not loaded.');
+            return;
+          }
+
+          params.options.url = params.url;
+
+          return L.esri.dynamicMapLayer(params.options);
+        }
+      },
+      agsFeature: {
+        mustHaveUrl: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.AGSFeatureLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The esri plugin is not loaded.');
+            return;
+          }
+
+          params.options.url = params.url;
+
+          var layer = L.esri.featureLayer(params.options);
+          var load = function load() {
+            if (isDefined(params.options.loadedDefer)) {
+              params.options.loadedDefer.resolve();
+            }
+          };
+          layer.on('loading', function () {
+            params.options.loadedDefer = $q.defer();
+            layer.off('load', load);
+            layer.on('load', load);
+          });
+
+          return layer;
+        }
+      },
+      agsHeatmap: {
+        mustHaveUrl: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.AGSHeatmapLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The esri heatmap layer plugin is not loaded.');
+            return;
+          }
+
+          if (!leafletHelpers.HeatLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The heatlayer plugin is not loaded.');
+            return;
+          }
+          return L.esri.heatmapFeatureLayer(params.url, params.options);
+        }
+      },
+      agsImage: {
+        mustHaveUrl: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.AGSImageMapLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The esri plugin is not loaded.');
+            return;
+          }
+          params.options.url = params.url;
+
+          return L.esri.imageMapLayer(params.options);
+        }
+      },
+      agsTiled: {
+        mustHaveUrl: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.AGSTiledMapLayerPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The esri plugin is not loaded.');
+            return;
+          }
+
+          params.options.url = params.url;
+
+          return L.esri.tiledMapLayer(params.options);
+        }
+      },
       bing: {
         mustHaveUrl: false,
         createLayer: function createLayer(params) {
@@ -107,22 +247,6 @@ angular.module('ui-leaflet').config(function ($provide) {
             return;
           }
           return new L.BingLayer(params.key, params.options);
-        }
-      },
-
-      wfs: {
-        mustHaveUrl: true,
-        mustHaveLayer: true,
-        createLayer: function createLayer(params) {
-          if (!leafletHelpers.WFSLayerPlugin.isLoaded()) {
-            $log.error(errorHeader + ' The WFSLayer plugin is not loaded.');
-            return;
-          }
-          var options = angular.copy(params.options);
-          if (options.crs && 'string' === typeof options.crs) {
-            options.crs = eval(options.crs);
-          }
-          return new L.GeoJSON.WFS(params.url, params.layer, options);
         }
       },
 
@@ -135,6 +259,18 @@ angular.module('ui-leaflet').config(function ($provide) {
             return;
           }
           return L.tileLayer.chinaProvider(type, params.options);
+        }
+      },
+
+      google: {
+        mustHaveUrl: false,
+        createLayer: function createLayer(params) {
+          var type = params.type || 'SATELLITE';
+          if (!leafletHelpers.GoogleLayerPlugin.isLoaded()) {
+            $log.error(errorHeader + ' The GoogleLayer plugin is not loaded.');
+            return;
+          }
+          return new L.Google(type, params.options);
         }
       },
 
@@ -157,6 +293,55 @@ angular.module('ui-leaflet').config(function ($provide) {
         }
       },
 
+      here: {
+        mustHaveUrl: false,
+        createLayer: function createLayer(params) {
+          var provider = params.provider || 'HERE.terrainDay';
+          if (!leafletHelpers.LeafletProviderPlugin.isLoaded()) {
+            return;
+          }
+          return new L.TileLayer.Provider(provider, params.options);
+        }
+      },
+
+      mapbox: {
+        mustHaveKey: true,
+        createLayer: function createLayer(params) {
+          var version = 3;
+          if (isDefined(params.options.version) && params.options.version === 4) {
+            version = params.options.version;
+          }
+          var url = version === 3 ? '//{s}.tiles.mapbox.com/v3/' + params.key + '/{z}/{x}/{y}.png' : '//api.tiles.mapbox.com/v4/' + params.key + '/{z}/{x}/{y}.png?access_token=' + params.apiKey;
+          return L.tileLayer(url, params.options);
+        }
+      },
+
+      mapboxGL: {
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.MapboxGL.isLoaded()) {
+            $log.error(errorHeader + ' The MapboxGL plugin is not loaded.');
+            return;
+          }
+          return new L.mapboxGL(params.options);
+        }
+      },
+
+      markercluster: {
+        mustHaveUrl: false,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.MarkerClusterPlugin.isLoaded()) {
+            $log.warn(errorHeader + ' The markercluster plugin is not loaded.');
+            return;
+          }
+          return new L.MarkerClusterGroup(params.options);
+        }
+      },
+
+      utfGrid: {
+        mustHaveUrl: true,
+        createLayer: utfGridCreateLayer
+      },
+
       webGLHeatmap: {
         mustHaveUrl: false,
         mustHaveData: true,
@@ -173,6 +358,22 @@ angular.module('ui-leaflet').config(function ($provide) {
         }
       },
 
+      wfs: {
+        mustHaveUrl: true,
+        mustHaveLayer: true,
+        createLayer: function createLayer(params) {
+          if (!leafletHelpers.WFSLayerPlugin.isLoaded()) {
+            $log.error(errorHeader + ' The WFSLayer plugin is not loaded.');
+            return;
+          }
+          var options = angular.copy(params.options);
+          if (options.crs && 'string' === typeof options.crs) {
+            options.crs = eval(options.crs);
+          }
+          return new L.GeoJSON.WFS(params.url, params.layer, options);
+        }
+      },
+
       yandex: {
         mustHaveUrl: false,
         createLayer: function createLayer(params) {
@@ -183,11 +384,6 @@ angular.module('ui-leaflet').config(function ($provide) {
           }
           return new L.Yandex(type, params.options);
         }
-      },
-
-      utfGrid: {
-        mustHaveUrl: true,
-        createLayer: utfGridCreateLayer
       }
     });
 

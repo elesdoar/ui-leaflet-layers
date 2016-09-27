@@ -12,7 +12,12 @@ gulp.task('browser-sync', function() {
     }
   });
 
-  gulp.watch('./src/**/*.coffee', gulp.series('release'));
-  gulp.watch('./dist/**/*.min.js', browserSync.reload);
-  gulp.watch('./examples/**/*.html', browserSync.reload);
+  const reload = (done) => {
+    browserSync.reload();
+    done();
+  };
+
+  gulp.watch('./src/**/*.es6', gulp.series('release'));
+  gulp.watch('./dist/**/*.min.js',  reload);
+  gulp.watch('./examples/**/*.html', reload);
 });

@@ -1,9 +1,9 @@
 angular.module('ui-leaflet')
   .config($provide =>
     $provide.decorator('leafletHelpers', function($delegate, leafletLayersLogger) {
-      let $log = leafletLayersLogger;
+      const $log = leafletLayersLogger;
 
-      let basicFunction = layerType =>
+      const basicFunction = layerType =>
         ({
           isLoaded() {
             return angular.isDefined(layerType);
@@ -16,18 +16,56 @@ angular.module('ui-leaflet')
           }
         });
 
-      angular.extend($delegate, {
-        GoogleLayerPlugin: basicFunction(L.Google),
-        MapboxGL: basicFunction(L.mapboxGL),
+      const plugins = {
+        // Please keep keys order by alphabetical sort.
         BingLayerPlugin: basicFunction(L.BingLayer),
-        WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
         ChinaLayerPlugin: basicFunction(L.tileLayer.chinaProvider),
+        GoogleLayerPlugin: basicFunction(L.Google),
         HeatLayerPlugin: basicFunction(L.heatLayer),
+        LeafletProviderPlugin: basicFunction(L.TileLayer.Provider),
+        MapboxGL: basicFunction(L.mapboxGL),
+        MarkerClusterPlugin: basicFunction(L.MarkerClusterGroup),
+        UTFGridPlugin: basicFunction(L.UtfGrid),
         WebGLHeatMapLayerPlugin: basicFunction(L.TileLayer.WebGLHeatMap),
-        YandexLayerPlugin: basicFunction(L.Yandex),
-        UTFGridPlugin: basicFunction(L.UtfGrid)
-      });
+        WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
+        YandexLayerPlugin: basicFunction(L.Yandex)
+      };
 
+      if(angular.isDefined(L.esri)) {
+        angular.extend(plugins, {
+          AGSBaseLayerPlugin: basicFunction(L.esri.basemapLayer),
+          AGSClusteredLayerPlugin: basicFunction(L.esri.clusteredFeatureLayer),
+          AGSDynamicMapLayerPlugin: basicFunction(L.esri.dynamicMapLayer),
+          AGSFeatureLayerPlugin: basicFunction(L.esri.featureLayer),
+          AGSImageMapLayerPlugin: basicFunction(L.esri.imageMapLayer),
+          AGSHeatmapLayerPlugin: basicFunction(L.esri.heatmapFeatureLayer),
+          AGSTiledMapLayerPlugin: basicFunction(L.esri.tiledMapLayer)
+        });
+      } else {
+        angular.extend(plugins, {
+          AGSBaseLayerPlugin: basicFunction(),
+          AGSClusteredLayerPlugin: basicFunction(),
+          AGSDynamicMapLayerPlugin: basicFunction(),
+          AGSFeatureLayerPlugin: basicFunction(),
+          AGSImageMapLayerPlugin: basicFunction(),
+          AGSHeatmapLayerPlugin: basicFunction(),
+          AGSTiledMapLayerPlugin: basicFunction()
+        });
+      }
+
+      if(angular.isDefined(window.lvector)) {
+        angular.extend(plugins, {
+          AGSLayerPlugin: basicFunction(window.lvector.AGS)
+        });
+      } else {
+        angular.extend(plugins, {
+          AGSLayerPlugin: basicFunction()
+        });
+      }
+
+      angular.extend($delegate, plugins);
+
+      $log.info('[ui-leaflet-layers] - Layers plugin is loaded');
 
       return $delegate;
     })

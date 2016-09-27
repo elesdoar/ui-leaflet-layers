@@ -25,6 +25,7 @@
   },
   "globals": {
     "angular": true,
-    "L": true
+    "L": true,
+    "lvector": true
   }
 }
