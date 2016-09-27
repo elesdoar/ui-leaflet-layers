@@ -24,7 +24,6 @@ angular.module('ui-leaflet')
         HeatLayerPlugin: basicFunction(L.heatLayer),
         LeafletProviderPlugin: basicFunction(L.TileLayer.Provider),
         MapboxGL: basicFunction(L.mapboxGL),
-        MarkerClusterPlugin: basicFunction(L.MarkerClusterGroup),
         UTFGridPlugin: basicFunction(L.UtfGrid),
         WebGLHeatMapLayerPlugin: basicFunction(L.TileLayer.WebGLHeatMap),
         WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),

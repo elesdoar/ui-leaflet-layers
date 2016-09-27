@@ -34,7 +34,6 @@
       HeatLayerPlugin: basicFunction(L.heatLayer),
       LeafletProviderPlugin: basicFunction(L.TileLayer.Provider),
       MapboxGL: basicFunction(L.mapboxGL),
-      MarkerClusterPlugin: basicFunction(L.MarkerClusterGroup),
       UTFGridPlugin: basicFunction(L.UtfGrid),
       WebGLHeatMapLayerPlugin: basicFunction(L.TileLayer.WebGLHeatMap),
       WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
@@ -323,17 +322,6 @@ angular.module('ui-leaflet').config(function ($provide) {
             return;
           }
           return new L.mapboxGL(params.options);
-        }
-      },
-
-      markercluster: {
-        mustHaveUrl: false,
-        createLayer: function createLayer(params) {
-          if (!leafletHelpers.MarkerClusterPlugin.isLoaded()) {
-            $log.warn(errorHeader + ' The markercluster plugin is not loaded.');
-            return;
-          }
-          return new L.MarkerClusterGroup(params.options);
         }
       },
 

@@ -246,17 +246,6 @@ angular.module('ui-leaflet')
           }
         },
 
-        markercluster: {
-          mustHaveUrl: false,
-          createLayer: function(params) {
-            if (!leafletHelpers.MarkerClusterPlugin.isLoaded()) {
-              $log.warn(errorHeader + ' The markercluster plugin is not loaded.');
-              return;
-            }
-            return new L.MarkerClusterGroup(params.options);
-          }
-        },
-
         utfGrid: {
           mustHaveUrl: true,
           createLayer: utfGridCreateLayer
