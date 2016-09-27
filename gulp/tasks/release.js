@@ -17,7 +17,7 @@ gulp.task('changelog', () => {
 });
 
 gulp.task('github-release', done => {
-  const token = JSON.parse(fs.readFileSync('./gulp/tasks/githubreleaser.json', 'utf8')).token;
+  const token = JSON.parse(fs.readFileSync('./gulp/.githubreleaser.json', 'utf8')).token;
   conventionalGithubReleaser({
     type: 'oauth',
     token: token
@@ -46,12 +46,12 @@ gulp.task('push-changes', (cb) => {
 });
 
 gulp.task('create-new-tag', (cb) => {
-  var version = getPackageJsonVersion();
   const getPackageJsonVersion = () => {
     // We parse the json file instead of using require because require caches
     // multiple calls so the version number won't be updated
     return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
   };
+  const version = getPackageJsonVersion();
 
   git.tag(version, 'Created Tag for version: ' + version, error => {
     if (error) {
