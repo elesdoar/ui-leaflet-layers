@@ -17,9 +17,10 @@ gulp.task('changelog', () => {
 });
 
 gulp.task('github-release', done => {
+  const token = JSON.parse(fs.readFileSync('./gulp/tasks/githubreleaser.json', 'utf8')).token;
   conventionalGithubReleaser({
     type: 'oauth',
-    token: '0126af95c0e2d9b0a7c78738c4c00a860b04acc8' // change this to your own GitHub token or use an environment variable
+    token: token
   }, {
     preset: 'angular' // Or to any other commit message convention you use.
   }, done);
