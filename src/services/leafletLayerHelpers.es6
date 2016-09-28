@@ -225,14 +225,12 @@ angular.module('ui-leaflet')
         mapbox: {
           mustHaveKey: true,
           createLayer(params) {
-            let version = 3;
-            if(isDefined(params.options.version) && params.options.version === 4) {
-              version = params.options.version;
-            }
-            let url = version === 3?
-              '//{s}.tiles.mapbox.com/v3/' + params.key + '/{z}/{x}/{y}.png':
-              '//api.tiles.mapbox.com/v4/' + params.key + '/{z}/{x}/{y}.png?access_token=' + params.apiKey;
-            return L.tileLayer(url, params.options);
+            let url = '//api.mapbox.com/styles/v1/{user}/{mapId}/tiles/256/{z}/{x}/{y}?access_token={apiKey}';
+            return L.tileLayer(url, angular.extend(params.options, {
+              mapId: params.key,
+              user: params.user,
+              apiKey: params.apiKey
+            }));
           }
         },
 

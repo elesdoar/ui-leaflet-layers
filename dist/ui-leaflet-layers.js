@@ -1,9 +1,9 @@
 /**
            * ui-leaflet-layers
            *
-           * @version: 0.1.1
+           * @version: 0.1.2
            * @author: Michael Salgado <elesdoar@gmail.com>
-           * @date: Tue Sep 27 2016 11:41:57 GMT-0500 (COT)
+           * @date: Wed Sep 28 2016 17:52:43 GMT-0500 (COT)
            * @license: MIT
            */
 (function (window, angular){
@@ -306,12 +306,12 @@ angular.module('ui-leaflet').config(function ($provide) {
       mapbox: {
         mustHaveKey: true,
         createLayer: function createLayer(params) {
-          var version = 3;
-          if (isDefined(params.options.version) && params.options.version === 4) {
-            version = params.options.version;
-          }
-          var url = version === 3 ? '//{s}.tiles.mapbox.com/v3/' + params.key + '/{z}/{x}/{y}.png' : '//api.tiles.mapbox.com/v4/' + params.key + '/{z}/{x}/{y}.png?access_token=' + params.apiKey;
-          return L.tileLayer(url, params.options);
+          var url = '//api.mapbox.com/styles/v1/{user}/{mapId}/tiles/256/{z}/{x}/{y}?access_token={apiKey}';
+          return L.tileLayer(url, angular.extend(params.options, {
+            mapId: params.key,
+            user: params.user,
+            apiKey: params.apiKey
+          }));
         }
       },
 

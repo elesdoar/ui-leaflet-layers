@@ -1,0 +1,60 @@
+<html ng-app="demoapp">
+  <head>
+    <title>Mapbox Basic Example</title>
+    <meta charset="utf-8">
+
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+    <script src="../bower_components/ui-leaflet/dist/ui-leaflet.js"></script>
+    <script src="../dist/ui-leaflet-layers.js"></script>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+    <!-- Mapbox GL -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.2/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.2/mapbox-gl.js'></script>
+
+    <!-- Mapbox GL Leaflet Plugin -->
+    <script src='https://rawgit.com/mapbox/mapbox-gl-leaflet/master/leaflet-mapbox-gl.js'></script>
+
+    <script>
+      var app = angular.module("demoapp", ['ui-leaflet']);
+      app.controller('MapboxBasicExample', function($scope, $timeout, leafletLayersLogger) {
+          leafletLayersLogger.currentLevel = leafletLayersLogger.LEVELS.debug;
+          angular.extend($scope, {
+              center: {
+                lat: 38.91275,
+                lng: -77.032194,
+                zoom: 8
+              },
+              layers: {
+                baselayers: {
+                  mapbox_basic: {
+                    name: 'Mapbox Basic',
+                    type: 'mapbox',
+                    key: 'citng102800332hphzmbjudn7',
+                    user: 'elesdoar',
+                    apiKey: 'pk.eyJ1IjoiZWxlc2RvYXIiLCJhIjoiY2l0bmcwaDNpMDQzMTJvbDRpaTltN2dlbiJ9.KDnhRVh9St6vpQovMI7iLg'
+                  },
+                  mapbox_outdoors: {
+                    name: 'Mapbox Outdoors',
+                    type: 'mapbox',
+                    key: 'citng3g0g003s2it88y9lg769',
+                    user: 'elesdoar',
+                    apiKey: 'pk.eyJ1IjoiZWxlc2RvYXIiLCJhIjoiY2l0bmcwaDNpMDQzMTJvbDRpaTltN2dlbiJ9.KDnhRVh9St6vpQovMI7iLg'
+                  }
+                },
+                overlays: {}
+              }
+            });
+        });
+    </script>
+  </head>
+
+  <body ng-controller="MapboxBasicExample">
+    <h2>Mapbox Basic Example</h2>
+    <leaflet lf-center="center" layers="layers" height="480px" width="100%"></leaflet>
+  </body>
+</html>
