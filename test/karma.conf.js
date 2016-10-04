@@ -37,7 +37,9 @@ module.exports = (config) => {
       '../bower_components/angular-mocks/angular-mocks.js',
       '../bower_components/angular-simple-logger/dist/angular-simple-logger.js',
       'http://maps.google.com/maps/api/js?key=AIzaSyBazU_OOTAZRmxQfaiirM1EDPLCiUSTlrY',
+      'http://api-maps.yandex.ru/2.1/?lang=en_US',
       '../bower_components/leaflet-plugins/layer/tile/Google.js',
+      '../bower_components/leaflet-plugins/layer/tile/Yandex.js',
       '../bower_components/ui-leaflet/dist/ui-leaflet.js',
       '../dist/ui-leaflet-layers.js',
       'unit/*.spec.js'
