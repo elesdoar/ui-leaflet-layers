@@ -5,7 +5,7 @@
   "main": "dist/ui-leaflet-layers.js",
   "scripts": {
     "start": "node_modules/gulp/bin/gulp.js",
-    "test": "node_modules/gulp/bin/gulp.js te test"
+    "test": "node_modules/gulp/bin/gulp.js test"
   },
   "repository": {
     "type": "git",
