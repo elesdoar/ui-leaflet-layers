@@ -3,6 +3,26 @@ angular.module('ui-leaflet')
     $provide.decorator('leafletHelpers', function($delegate, leafletLayersLogger) {
       const $log = leafletLayersLogger;
 
+      const _versionCompare = (left, right) => {
+        if(typeof left + typeof right !== 'stringstring') {
+          return false;
+        }
+
+        let a = left.split('.');
+        let b = right.split('.');
+        let i = 0, len = Math.max(a.length, b.length);
+
+        for (; i < len; i++) {
+          if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
+            return 1;
+          } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
+            return -1;
+          }
+        }
+
+        return 0;
+      };
+
       const basicFunction = layerType =>
         ({
           isLoaded() {
@@ -20,7 +40,6 @@ angular.module('ui-leaflet')
         // Please keep keys order by alphabetical sort.
         BingLayerPlugin: basicFunction(L.BingLayer),
         ChinaLayerPlugin: basicFunction(L.tileLayer.chinaProvider),
-        GoogleLayerPlugin: basicFunction(L.Google),
         HeatLayerPlugin: basicFunction(L.heatLayer),
         LeafletProviderPlugin: basicFunction(L.TileLayer.Provider),
         MapboxGL: basicFunction(L.mapboxGL),
@@ -29,6 +48,13 @@ angular.module('ui-leaflet')
         WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
         YandexLayerPlugin: basicFunction(L.Yandex)
       };
+
+      if(_versionCompare(L.version, '1.0.0') === -1) {
+        plugins.GoogleLayerPlugin = basicFunction(L.Google);
+      } else {
+        plugins.GoogleLayerPlugin = basicFunction(L.GridLayer.GoogleMutant);
+      }
+      plugins.versionCompare = _versionCompare;
 
       if(angular.isDefined(L.esri)) {
         angular.extend(plugins, {

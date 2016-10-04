@@ -188,7 +188,16 @@ angular.module('ui-leaflet')
               $log.error(errorHeader + ' The GoogleLayer plugin is not loaded.');
               return;
             }
-            return new L.Google(type, params.options);
+            let layer = null;
+
+            if(leafletHelpers.versionCompare(L.version, '1.0.0') === -1) {
+              layer = new L.Google(type.toUpperCase(), params.options);
+            } else {
+              layer = new L.GridLayer.GoogleMutant({
+                type: type.toLowerCase()
+              });
+            }
+            return layer;
           }
         },
 
