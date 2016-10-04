@@ -3,7 +3,7 @@
            *
            * @version: 0.1.2
            * @author: Michael Salgado <elesdoar@gmail.com>
-           * @date: Mon Oct 03 2016 19:14:04 GMT-0500 (COT)
+           * @date: Mon Oct 03 2016 19:53:31 GMT-0500 (COT)
            * @license: MIT
            */
 (function (window, angular){

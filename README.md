@@ -1,6 +1,10 @@
 # ui-leaflet-layers
 
-Angular UI Leaflet Layers Plugin, it extend layer capabilities for [ui-leaflet](http://angular-ui.github.io/ui-leaflet)
+[![Build Status](https://travis-ci.org/elesdoar/ui-leaflet-layers.svg?branch=master)](https://travis-ci.org/elesdoar/ui-leaflet-layers)
+[![dependencies Status](https://david-dm.org/elesdoar/ui-leaflet-layers/status.svg)](https://david-dm.org/elesdoar/ui-leaflet-layers)
+[![devDependencies Status](https://david-dm.org/elesdoar/ui-leaflet-layers/dev-status.svg)](https://david-dm.org/elesdoar/ui-leaflet-layers?type=dev)
+
+Angular UI Leaflet Layers Plugin, it extend layer capabilities for [ui-leaflet](http://angular-ui.github.io/ui-leaflet) layers directive.
 
 ### Supported Layers:
 
