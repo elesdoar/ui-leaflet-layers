@@ -1,6 +1,6 @@
 {
   "name": "ui-leaflet-layers",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Angular UI Leaflet Layers Plugin",
   "main": "dist/ui-leaflet-layers.js",
   "scripts": {
