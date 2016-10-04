@@ -3,12 +3,12 @@
            *
            * @version: 0.1.2
            * @author: Michael Salgado <elesdoar@gmail.com>
-           * @date: Mon Oct 03 2016 19:53:31 GMT-0500 (COT)
+           * @date: Tue Oct 04 2016 12:23:33 GMT-0500 (COT)
            * @license: MIT
            */
 (function (window, angular){
   'use strict';
-  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 angular.module('ui-leaflet').config(function ($provide) {
   return $provide.decorator('leafletHelpers', function ($delegate, leafletLayersLogger) {

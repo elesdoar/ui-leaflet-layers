@@ -56,10 +56,8 @@
     "karma-jasmine": "~1.0.x",
     "karma-mocha-reporter": "~2.x",
     "karma-phantomjs-launcher": "~1.0.x",
-    "karma-should": "~1.0.0",
-    "mocha": "^2.x",
     "open": "0.0.5",
-    "phantomjs": "^1.9.18",
+    "phantomjs": "^2.1.7",
     "require-directory": "^2.x"
   },
   "dependencies": {
