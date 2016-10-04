@@ -17,7 +17,8 @@ gulp.task('browser-sync', function() {
     done();
   };
 
-  gulp.watch('./src/**/*.es6', gulp.series('release'));
+  gulp.watch('./src/**/*.es6', gulp.series('build-release'));
+  gulp.watch('./test/**/*.spec.js', gulp.series('test'));
   gulp.watch('./dist/**/*.min.js',  reload);
   gulp.watch('./examples/**/*.html', reload);
 });

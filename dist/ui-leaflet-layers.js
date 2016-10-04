@@ -3,14 +3,37 @@
            *
            * @version: 0.1.2
            * @author: Michael Salgado <elesdoar@gmail.com>
-           * @date: Wed Sep 28 2016 17:52:43 GMT-0500 (COT)
+           * @date: Mon Oct 03 2016 19:14:04 GMT-0500 (COT)
            * @license: MIT
            */
 (function (window, angular){
   'use strict';
-  angular.module('ui-leaflet').config(function ($provide) {
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+angular.module('ui-leaflet').config(function ($provide) {
   return $provide.decorator('leafletHelpers', function ($delegate, leafletLayersLogger) {
     var $log = leafletLayersLogger;
+
+    var _versionCompare = function _versionCompare(left, right) {
+      if ((typeof left === 'undefined' ? 'undefined' : _typeof(left)) + (typeof right === 'undefined' ? 'undefined' : _typeof(right)) !== 'stringstring') {
+        return false;
+      }
+
+      var a = left.split('.');
+      var b = right.split('.');
+      var i = 0,
+          len = Math.max(a.length, b.length);
+
+      for (; i < len; i++) {
+        if (a[i] && !b[i] && parseInt(a[i]) > 0 || parseInt(a[i]) > parseInt(b[i])) {
+          return 1;
+        } else if (b[i] && !a[i] && parseInt(b[i]) > 0 || parseInt(a[i]) < parseInt(b[i])) {
+          return -1;
+        }
+      }
+
+      return 0;
+    };
 
     var basicFunction = function basicFunction(layerType) {
       return {
@@ -30,7 +53,6 @@
       // Please keep keys order by alphabetical sort.
       BingLayerPlugin: basicFunction(L.BingLayer),
       ChinaLayerPlugin: basicFunction(L.tileLayer.chinaProvider),
-      GoogleLayerPlugin: basicFunction(L.Google),
       HeatLayerPlugin: basicFunction(L.heatLayer),
       LeafletProviderPlugin: basicFunction(L.TileLayer.Provider),
       MapboxGL: basicFunction(L.mapboxGL),
@@ -39,6 +61,13 @@
       WFSLayerPlugin: basicFunction(L.GeoJSON.WFS),
       YandexLayerPlugin: basicFunction(L.Yandex)
     };
+
+    if (_versionCompare(L.version, '1.0.0') === -1) {
+      plugins.GoogleLayerPlugin = basicFunction(L.Google);
+    } else {
+      plugins.GoogleLayerPlugin = basicFunction(L.GridLayer.GoogleMutant);
+    }
+    plugins.versionCompare = _versionCompare;
 
     if (angular.isDefined(L.esri)) {
       angular.extend(plugins, {
@@ -269,7 +298,16 @@ angular.module('ui-leaflet').config(function ($provide) {
             $log.error(errorHeader + ' The GoogleLayer plugin is not loaded.');
             return;
           }
-          return new L.Google(type, params.options);
+          var layer = null;
+
+          if (leafletHelpers.versionCompare(L.version, '1.0.0') === -1) {
+            layer = new L.Google(type.toUpperCase(), params.options);
+          } else {
+            layer = new L.GridLayer.GoogleMutant({
+              type: type.toLowerCase()
+            });
+          }
+          return layer;
         }
       },
 

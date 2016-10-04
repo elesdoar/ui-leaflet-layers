@@ -5,7 +5,7 @@ const { log } = require('gulp-util');
 
 let karmaRunner = (done) => {
   log('-- Karma Setup --');
-  const karmaConf = require.resolve('../../karma.conf.coffee');
+  const karmaConf = require.resolve('../../test/karma.conf.js');
   try {
     new Karma({
       configFile: karmaConf,

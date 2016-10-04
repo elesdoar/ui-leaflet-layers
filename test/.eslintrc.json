@@ -1,0 +1,13 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }]
+  },
+  "globals": {
+    "inject": true,
+    "expect": true
+  }
+}
