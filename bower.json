@@ -31,7 +31,7 @@
   "dependencies": {
     "leaflet": "0.7.x",
     "angular": "^1.5.x",
-    "ui-leaflet": "elesdoar/ui-leaflet#master"
+    "ui-leaflet": "~2.0.0"
   },
   "devDependencies": {
     "azgs-leaflet": "azgs/azgs-leaflet",
