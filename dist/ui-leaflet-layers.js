@@ -1,17 +1,17 @@
 /**
            * ui-leaflet-layers
            *
-           * @version: 0.1.2
+           * @version: 0.1.3
            * @author: Michael Salgado <elesdoar@gmail.com>
-           * @date: Tue Oct 04 2016 12:23:33 GMT-0500 (COT)
+           * @date: Mon Oct 10 2016 15:14:31 GMT-0500 (COT)
            * @license: MIT
            */
 (function (window, angular){
   'use strict';
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-angular.module('ui-leaflet').config(function ($provide) {
-  return $provide.decorator('leafletHelpers', function ($delegate, leafletLayersLogger) {
+angular.module('ui-leaflet').config(['$provide', function ($provide) {
+  return $provide.decorator('leafletHelpers', ['$delegate', 'leafletLayersLogger', function ($delegate, leafletLayersLogger) {
     var $log = leafletLayersLogger;
 
     var _versionCompare = function _versionCompare(left, right) {
@@ -106,10 +106,10 @@ angular.module('ui-leaflet').config(function ($provide) {
     $log.info('[ui-leaflet-layers] - Layers plugin is loaded');
 
     return $delegate;
-  });
-});
-angular.module('ui-leaflet').config(function ($provide) {
-  return $provide.decorator('leafletLayerHelpers', function ($delegate, $rootScope, $q, leafletHelpers, leafletLayersLogger) {
+  }]);
+}]);
+angular.module('ui-leaflet').config(['$provide', function ($provide) {
+  return $provide.decorator('leafletLayerHelpers', ['$delegate', '$rootScope', '$q', 'leafletHelpers', 'leafletLayersLogger', function ($delegate, $rootScope, $q, leafletHelpers, leafletLayersLogger) {
     var $log = leafletLayersLogger;
     var isArray = leafletHelpers.isArray;
     var isObject = leafletHelpers.isObject;
@@ -414,11 +414,11 @@ angular.module('ui-leaflet').config(function ($provide) {
     });
 
     return $delegate;
-  });
-});
-angular.module('ui-leaflet').service('leafletLayersLogger', function (nemSimpleLogger) {
+  }]);
+}]);
+angular.module('ui-leaflet').service('leafletLayersLogger', ['nemSimpleLogger', function (nemSimpleLogger) {
   return nemSimpleLogger.spawn();
-});
+}]);
 //# sourceMappingURL=ui-leaflet-layers.js.map
 
 })(window, angular);

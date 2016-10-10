@@ -1,6 +1,6 @@
 angular.module('ui-leaflet')
-  .config($provide =>
-    $provide.decorator('leafletHelpers', function($delegate, leafletLayersLogger) {
+  .config(['$provide', $provide =>
+    $provide.decorator('leafletHelpers', ['$delegate', 'leafletLayersLogger', ($delegate, leafletLayersLogger) => {
       const $log = leafletLayersLogger;
 
       const _versionCompare = (left, right) => {
@@ -93,5 +93,5 @@ angular.module('ui-leaflet')
       $log.info('[ui-leaflet-layers] - Layers plugin is loaded');
 
       return $delegate;
-    })
-  );
+    }])
+  ]);

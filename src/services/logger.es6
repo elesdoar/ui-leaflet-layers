@@ -1,2 +1,2 @@
 angular.module('ui-leaflet')
-  .service('leafletLayersLogger', nemSimpleLogger => nemSimpleLogger.spawn());
+  .service('leafletLayersLogger', ['nemSimpleLogger', nemSimpleLogger => nemSimpleLogger.spawn()]);
